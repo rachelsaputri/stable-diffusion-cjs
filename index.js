@@ -16,7 +16,7 @@ function generateHash() {
 
 let enhancements =  " realistic, smoothening, epic cinematic lighting, dark villanous looking background."
 
-function generate(prompta, cb) {
+function generate(prompta) {
     const client = new WebSocket(API_URL);
     const hash = generateHash()
     let prompt = prompta
@@ -25,7 +25,7 @@ function generate(prompta, cb) {
     }
     let tmr = setTimeout(() => {
         client.close()
-        cb({
+        return({
             error: true
         })
     }, 120000);
@@ -35,7 +35,7 @@ function generate(prompta, cb) {
     })
 
     client.on("error",()=>{
-        cb({
+        return({
             error:true,
         })
     })
@@ -54,12 +54,12 @@ function generate(prompta, cb) {
             clearTimeout(tmr)
             try{
                 const results = msg.output.data[0]
-                cb({
+                return({
                     error:false,
                     results
                 })
             }catch(e){
-                cb({
+                return({
                     error:true,
                 })
             }
